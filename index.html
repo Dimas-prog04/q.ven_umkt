@@ -301,8 +301,8 @@
     }
     .btn-peta-icon svg { transition: transform 0.3s; }
     .btn-peta-icon.open svg { transform: rotate(180deg); }
-    /* Make the map button span both columns in the steps grid */
-    .steps-grid .btn-peta { grid-column: 1 / -1; justify-self: center; }
+    .btn-peta { width: 100%; justify-content: center; }
+    .steps-grid .btn-peta { grid-column: auto; justify-self: stretch; }
 
     /* ── CARA KERJA PETA (Flowchart) ── */
     .ck-peta {
@@ -330,11 +330,21 @@
     @keyframes waveMove3 { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
     .ck-peta-inner { position: relative; z-index: 10; max-width: 1200px; margin: 0 auto; }
-    .ck-peta-header { text-align: center; margin-bottom: 64px; }
-    .ck-peta-header p { font-size: 0.82rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.7); margin-bottom: 8px; }
-    .ck-peta-header h2 { font-weight: 800; font-size: clamp(1.6rem, 3vw, 2.4rem); color: #fff; }
-    .ck-peta-header h2 span { color: #93c5fd; }
-    .ck-peta-header .sub { font-size: 0.88rem; margin-top: 8px; color: rgba(255,255,255,0.75); }
+    .ck-peta-header {
+      text-align: center;
+      margin: 0 0 24px;
+      max-width: none;
+      background: none;
+      padding: 0;
+      border-radius: 0;
+      display: block;
+      backdrop-filter: none;
+      box-shadow: none;
+    }
+    .ck-peta-header p { font-size: 0.82rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #ffffff; margin-bottom: 6px; }
+    .ck-peta-header h2 { font-weight: 800; font-size: clamp(1.4rem, 2.6vw, 2rem); color: #ffffff; margin: 0; }
+    .ck-peta-header h2 span { color: #ffffff; font-weight: 800; }
+    .ck-peta-header .sub { font-size: 0.88rem; margin-top: 8px; color: #ffffff; }
 
     .flowchart { position: relative; height: clamp(350px, 45vw, 500px); }
     .flowchart svg.lines { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
@@ -353,7 +363,7 @@
 
     .flow-node-group { position: relative; }
     .flow-node-circle {
-      width: 60px; height: 60px; border-radius: 50%;
+      width: clamp(68px, 9vw, 88px); height: clamp(68px, 9vw, 88px); border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
       cursor: pointer;
       background: linear-gradient(135deg, #2563eb, #1d4ed8);
@@ -361,11 +371,14 @@
       box-shadow: 0 10px 20px rgba(0,0,0,0.3);
       transition: transform 0.3s;
     }
-    .flow-node-circle:hover { transform: scale(1.1); }
+    .flow-node-circle:hover { transform: scale(1.05); }
     .flow-node-circle .inner {
-      width: 40px; height: 40px; border-radius: 50%;
+      width: clamp(44px, 6vw, 56px); height: clamp(44px, 6vw, 56px); border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
       background: white;
+    }
+    .flow-node-circle .inner svg {
+      width: 26px; height: 26px;
     }
     .flow-tooltip {
       position: absolute; width: 200px; padding: 12px; border-radius: 12px;
@@ -513,6 +526,7 @@
       0%, 100% { transform: translate(-50%,-50%) scale(1); opacity: 0.5; }
       50% { transform: translate(-50%,-50%) scale(1.2); opacity: 1; }
     }
+    
   </style>
 </head>
 <body>
@@ -726,6 +740,7 @@ function closeMenu() {
   document.getElementById('hamburger').classList.remove('open');
   document.getElementById('mobileMenu').classList.remove('open');
 }
+
 
 /* ===================== ORBIT ROTATION ===================== */
 (function() {
