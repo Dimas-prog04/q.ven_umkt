@@ -130,7 +130,7 @@
       font-size: clamp(1.6rem, 3.5vw, 2.6rem); font-weight: 500;
     }
     .hero-left h1 strong { font-weight: 800; }
-    .hero-left p { font-size: 0.8rem; margin-bottom: 32px; line-height: 1.6; color: rgba(255,255,255,0.85); }
+    .hero-left p { font-size: clamp(0.75rem, 2.5vw, 0.95rem); margin-bottom: 32px; line-height: 1.6; color: rgba(255,255,255,0.85); }
     .hero-buttons { display: flex; gap: 16px; }
     .hero-buttons button {
       padding: 12px 28px; border-radius: 999px;
@@ -451,7 +451,7 @@
       .mobile-menu.open { display: flex; }
       .ck-grid { grid-template-columns: 1fr; gap: 48px; }
       .orbit-container { transform: scale(0.85); }
-      .hero-inner { flex-direction: column; text-align: center; gap: 40px; }
+      .hero-inner { flex-direction: column; text-align: center; gap: 32px; padding: 60px 5% !important; }
       .hero-left { max-width: 100%; }
       .hero-buttons { justify-content: center; }
       .hero-right { max-width: 420px; }
@@ -487,6 +487,8 @@
       /* UBAH INI: Naikkan tingginya dari 380px menjadi sekitar 500px */
       .marquee-container { height: 500px; }
       .fitur-card { width: 280px; }
+      .hero-left h1 { margin-bottom: 16px; line-height: 1.3; }
+      .hero-left p { margin-bottom: 24px; }
     }
     /* Extra-small devices (phones) optimizations */
     @media (max-width: 480px) {
@@ -495,9 +497,9 @@
       .mobile-menu { top: 56px; bottom: 0; overflow-y: auto; }
 
       .hero { min-height: 100vh; }
-      .hero-inner { padding: 40px 5%; flex-direction: column; gap: 28px; }
-      .hero-left h1 { font-size: clamp(1.25rem, 6vw, 1.8rem); }
-      .hero-left p { font-size: 0.88rem; }
+      .hero-inner { padding: 50px 5%; flex-direction: column; gap: 24px; }
+      .hero-left h1 { font-size: clamp(1.1rem, 5vw, 1.6rem); margin-bottom: 12px; line-height: 1.35; }
+      .hero-left p { font-size: clamp(0.7rem, 2.2vw, 0.85rem); margin-bottom: 20px; }
       .hero-buttons { flex-direction: column; gap: 12px; }
       .hero-buttons button { width: 100%; padding: 12px; }
       .hero-right img { max-width: 320px; margin: 0 auto; }
@@ -741,6 +743,29 @@ function closeMenu() {
   document.getElementById('mobileMenu').classList.remove('open');
 }
 
+/* ===================== THEME TOGGLE ===================== */
+function applyTheme(theme) {
+  if (theme === 'dark') document.documentElement.classList.add('dark');
+  else document.documentElement.classList.remove('dark');
+  const btn = document.getElementById('themeToggle');
+  if (btn) btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+  try { localStorage.setItem('theme', theme); } catch(e){}
+}
+
+function toggleTheme() {
+  const isDark = document.documentElement.classList.contains('dark');
+  applyTheme(isDark ? 'light' : 'dark');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const saved = (function(){ try { return localStorage.getItem('theme'); } catch(e){ return null; } })();
+  if (saved) applyTheme(saved);
+  else {
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    applyTheme(prefersDark ? 'dark' : 'light');
+  }
+  const tbtn = document.getElementById('themeToggle'); if (tbtn) tbtn.addEventListener('click', toggleTheme);
+});
 
 /* ===================== ORBIT ROTATION ===================== */
 (function() {
