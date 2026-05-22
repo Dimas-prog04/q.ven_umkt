@@ -91,7 +91,6 @@
       padding: 20px 5% 28px;
       background: rgba(37, 99, 235, 0.98);
     }
-    .mobile-menu.open { display: flex; }
     .mobile-menu a {
       font-weight: 500; font-size: 0.95rem;
       color: rgba(255,255,255,0.8); padding: 10px 0;
@@ -180,24 +179,39 @@
     .fitur-header h2 { font-weight: 800; font-size: clamp(1.4rem, 2.5vw, 2rem); color: #1e293b; }
     .fitur-header h2 span { color: #2563eb; }
 
-    .marquee-container { position: relative; z-index: 10; height: 476px; padding: 20px 0; }
-    .marquee-track-wrapper { position: absolute; inset: 0; display: flex; gap: 24px; }
-    .marquee-track {
-      display: flex; gap: 24px; position: absolute;
-      will-change: transform;
+    .marquee-container { 
+      position: relative; 
+      z-index: 10; 
+      height: 550px; /* Tinggi disesuaikan agar tidak terpotong seperti masalah sebelumnya */
+      padding: 20px 0; 
+      overflow: hidden; 
     }
-    .marquee-track-a { left: 0; animation: marqueeA 16s linear infinite; }
-    .marquee-track-b { left: 1092px; animation: marqueeB 16s linear infinite; }
+    .marquee-track-wrapper { 
+      display: flex; 
+      width: max-content; 
+    }
+    .marquee-track {
+      display: flex; 
+      gap: 24px; 
+      padding-right: 24px;
+      /* Animasi berjalan ke kiri selama 30 detik (bisa diubah kecepatannya) */
+      animation: scrollMarquee 30s linear infinite; 
+    }
     .fitur-card {
-      flex: none; width: 340px; border-radius: 16px; overflow: hidden;
+      flex: none; 
+      width: clamp(240px, 32vw, 340px); 
+      border-radius: 16px; 
+      overflow: hidden;
       box-shadow: 0 4px 20px rgba(0,0,0,0.08);
       transition: transform 0.5s cubic-bezier(0.4,0,0.2,1), opacity 0.5s cubic-bezier(0.4,0,0.2,1);
-      will-change: transform, opacity;
     }
     .fitur-card img { width: 100%; height: auto; display: block; user-select: none; pointer-events: none; }
 
-    @keyframes marqueeA { 0% { transform: translateX(0); } 100% { transform: translateX(-1092px); } }
-    @keyframes marqueeB { 0% { transform: translateX(0); } 100% { transform: translateX(-1092px); } }
+    /* Kunci animasi: Geser persis 50% dari total panjang track */
+    @keyframes scrollMarquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
 
     /* ── CARA KERJA OVERVIEW ── */
     .ck-overview {
@@ -219,27 +233,29 @@
 
     /* Orbit */
     .orbit-wrap { display: flex; justify-content: center; align-items: center; }
-    .orbit-container { position: relative; width: 500px; height: 500px; }
+    .orbit-container { position: relative; width: min(80vmin, 500px); height: min(80vmin, 500px); }
     .orbit-ring-outer {
       position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-      width: 470px; height: 470px; border-radius: 50%;
+      width: 94%; height: 94%; border-radius: 50%;
       border: 1.5px solid rgba(29, 78, 216, 0.15);
     }
     .orbit-ring-inner {
       position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-      width: 310px; height: 310px; border-radius: 50%;
+      width: 62%; height: 62%; border-radius: 50%;
       border: 1.5px solid rgba(29, 78, 216, 0.10);
     }
     .orbit-center {
       position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-      width: 130px; height: 130px; border-radius: 50%;
+      width: 26%; height: 26%; border-radius: 50%;
+      min-width: 80px; min-height: 80px; max-width: 160px; max-height: 160px;
       background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
       box-shadow: 0 0 0 16px rgba(59, 130, 246, 0.10), 0 0 0 32px rgba(59, 130, 246, 0.05);
       display: flex; align-items: center; justify-content: center; z-index: 10;
     }
     .orbit-node {
       position: absolute; top: 50%; left: 50%;
-      width: 46px; height: 46px; margin-top: -23px; margin-left: -23px;
+      width: clamp(36px, 8vmin, 46px); height: clamp(36px, 8vmin, 46px);
+      margin-top: calc(-1 * (clamp(36px, 8vmin, 46px) / 2)); margin-left: calc(-1 * (clamp(36px, 8vmin, 46px) / 2));
       background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
       border-radius: 50%; z-index: 5;
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
@@ -285,6 +301,8 @@
     }
     .btn-peta-icon svg { transition: transform 0.3s; }
     .btn-peta-icon.open svg { transform: rotate(180deg); }
+    /* Make the map button span both columns in the steps grid */
+    .steps-grid .btn-peta { grid-column: 1 / -1; justify-self: center; }
 
     /* ── CARA KERJA PETA (Flowchart) ── */
     .ck-peta {
@@ -412,22 +430,84 @@
     .reveal.visible { opacity: 1; transform: none; }
 
     /* ── RESPONSIVE ── */
-    @media (max-width: 1024px) {
+    @media (max-width: 768px) {
+      /* Mobile breakpoint: show hamburger and mobile menu only on small screens */
       .navbar .nav-links { display: none; }
       .navbar .nav-actions { display: none; }
       .hamburger { display: flex; }
+      .mobile-menu.open { display: flex; }
       .ck-grid { grid-template-columns: 1fr; gap: 48px; }
       .orbit-container { transform: scale(0.85); }
       .hero-inner { flex-direction: column; text-align: center; gap: 40px; }
       .hero-left { max-width: 100%; }
       .hero-buttons { justify-content: center; }
       .hero-right { max-width: 420px; }
+
+      /* 1. Batasi lebar wrapper selebar layar dan nyalakan scroll horizontal */
+      .marquee-track-wrapper {
+        width: 100% !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+        padding-bottom: 15px;
+      }
+      
+      /* 2. Matikan animasi otomatis agar tidak melawan jari saat di-scroll */
+      .marquee-track {
+        animation: none !important;
+        width: max-content;
+      }
+      
+      /* 3. Efek magnet agar saat digeser, card posisinya pas di tengah */
+      .fitur-card {
+        scroll-snap-align: center;
+      }
+
+      /* 4. (Opsional) Sembunyikan garis scrollbar agar UI tetap bersih */
+      .marquee-track-wrapper::-webkit-scrollbar {
+        display: none;
+      }
     }
     @media (max-width: 640px) {
       .steps-grid { grid-template-columns: 1fr; }
       .orbit-container { transform: scale(0.65); }
-      .marquee-container { height: 380px; }
+      /* UBAH INI: Naikkan tingginya dari 380px menjadi sekitar 500px */
+      .marquee-container { height: 500px; }
       .fitur-card { width: 280px; }
+    }
+    /* Extra-small devices (phones) optimizations */
+    @media (max-width: 480px) {
+      .navbar { height: 56px; padding: 0 4%; }
+      .navbar .logo img { height: 28px; }
+      .mobile-menu { top: 56px; bottom: 0; overflow-y: auto; }
+
+      .hero { min-height: 100vh; }
+      .hero-inner { padding: 40px 5%; flex-direction: column; gap: 28px; }
+      .hero-left h1 { font-size: clamp(1.25rem, 6vw, 1.8rem); }
+      .hero-left p { font-size: 0.88rem; }
+      .hero-buttons { flex-direction: column; gap: 12px; }
+      .hero-buttons button { width: 100%; padding: 12px; }
+      .hero-right img { max-width: 320px; margin: 0 auto; }
+
+      /* Make marquee static / scrollable on small screens to reduce CPU */
+      /* UBAH INI: Biarkan tingginya auto agar page di bawah otomatis terdorong turun */
+      .marquee-container { height: auto; }
+      .marquee-track-wrapper { position: relative; display: flex; gap: 16px; overflow-x: auto; padding-bottom: 6px; }
+      .marquee-track, .marquee-track-a, .marquee-track-b { position: static !important; left: auto !important; animation: none !important; display: flex; gap: 16px; }
+      /* hide duplicated track on small screens */
+      .marquee-track.marquee-track-b { display: none !important; }
+      .fitur-card { width: 260px; }
+
+      /* UBAH INI JUGA: Agar logo stack teknologi tidak kepotong */
+      .tech-marquee-container { height: auto; padding-bottom: 20px; }
+      .tech-marquee-wrapper { position: relative; display: flex; gap: 12px; overflow-x: auto; }
+      .tech-marquee-track, .tech-track-a, .tech-track-b { position: static !important; left: auto !important; animation: none !important; display: flex; gap: 12px; }
+      .tech-marquee-track.tech-track-b { display: none !important; }
+      .tech-card { width: 220px; }
+
+      .ck-peta .flowchart { height: 300px; }
+
+      .btn-primary, .btn-secondary { width: 100%; }
     }
     @keyframes spBlob {
       0%, 100% { transform: translate(-50%,-50%) scale(1); opacity: 0.5; }
@@ -440,6 +520,8 @@
 <!-- NAVBAR -->
 <nav class="navbar">
   <div class="logo">
+    <!-- TODO (PHP): Ganti atribut src ini dengan path dinamis dari server, misal: -->
+    <!-- <?php echo $logoPath; ?> atau base_url('images/logo-qven.png') -->
     <img src="logo-qven.png" alt="Q.ven">
   </div>
   <ul class="nav-links">
@@ -456,12 +538,15 @@
     <span></span><span></span><span></span>
   </div>
 </nav>
+<!-- Mobile menu (hanya muncul di mobile). -->
 <div class="mobile-menu" id="mobileMenu">
+  <!-- TODO (PHP): Render daftar menu secara dinamis jika diperlukan -->
   <a href="#hero" onclick="closeMenu()">Dashboard</a>
   <a href="#fitur" onclick="closeMenu()">Fitur</a>
   <a href="#cara-kerja" onclick="closeMenu()">Cara Kerja</a>
   <a href="#teknologi" onclick="closeMenu()">Teknologi</a>
   <div class="mobile-actions">
+    <!-- TODO (PHP): Ganti href button login/signup ke endpoint PHP autentikasi -->
     <a href="#" class="btn-login">Log In</a>
     <a href="#" class="btn-signup-mobile">Sign Up</a>
   </div>
@@ -471,7 +556,7 @@
 <section class="hero" id="hero">
   <div class="hero-inner">
     <div class="hero-left">
-      <h1>Memastikan kualitas gizi serta <strong>Kelayakan Vendor</strong> dengan <strong>Machine Learning</strong> dan Transparansi <strong>Blockchain</strong></h1>
+      <h1>Memastikan <strong>kualitas gizinya</strong> serta <strong>Kelayakan Vendor</strong> dengan <strong>Machine Learning</strong> dan Transparansi <strong>Blockchain</strong></h1>
       <p>Quality Vendor and Nutrition<br>Makan Bergizi Gratis</p>
       <div class="hero-buttons">
         <button class="btn-primary">Coba Sekarang</button>
@@ -479,6 +564,7 @@
       </div>
     </div>
     <div class="hero-right">
+      <!-- TODO (PHP): Ganti src gambar hero dengan path dinamis dari server jika perlu -->
       <img src="food-tray.png" alt="Nampan Makanan Bergizi">
     </div>
   </div>
@@ -496,8 +582,6 @@
   </div>
   <div class="marquee-container">
     <div class="marquee-track-wrapper">
-      <div class="marquee-track marquee-track-a" id="fiturTrackA"></div>
-      <div class="marquee-track marquee-track-b" id="fiturTrackB"></div>
     </div>
   </div>
 </section>
@@ -548,28 +632,28 @@
             <span class="step-text">Akses Sistem</span>
           </div>
           <div class="step-item">
-            <div class="step-num">5</div>
-            <span class="step-text">Pengelolaan Data oleh Admin Vendor</span>
-          </div>
-          <div class="step-item">
             <div class="step-num">2</div>
             <span class="step-text">Registrasi dan Login</span>
-          </div>
-          <div class="step-item">
-            <div class="step-num">6</div>
-            <span class="step-text">Analisis dan Penyimpanan Data</span>
           </div>
           <div class="step-item">
             <div class="step-num">3</div>
             <span class="step-text">Identifikasi Role Pengguna</span>
           </div>
           <div class="step-item">
-            <div class="step-num">7</div>
-            <span class="step-text">Penerimaan dan Feedback</span>
-          </div>
-          <div class="step-item">
             <div class="step-num">4</div>
             <span class="step-text">Pengelolaan Vendor</span>
+          </div>
+          <div class="step-item">
+            <div class="step-num">5</div>
+            <span class="step-text">Pengelolaan Data oleh Admin Vendor</span>
+          </div>
+          <div class="step-item">
+            <div class="step-num">6</div>
+            <span class="step-text">Analisis dan Penyimpanan Data</span>
+          </div>
+          <div class="step-item">
+            <div class="step-num">7</div>
+            <span class="step-text">Penerimaan dan Feedback</span>
           </div>
           <button class="btn-peta" id="btnPeta" onclick="togglePeta()">
             <div class="btn-peta-icon" id="btnPetaIcon">
@@ -650,21 +734,48 @@ function closeMenu() {
   if (!orbitContainer) return;
 
   const baseAngles = [0, 51, 103, 154, 206, 257, 309];
-  const baseRadii = [155, 235, 155, 235, 155, 235, 155];
+  let baseRadii = [];
   let rotation = 0, isHovering = false;
+
+  // Compute radii based on orbitContainer size so orbit adapts to viewport
+  function computeRadii() {
+    const rect = orbitContainer.getBoundingClientRect();
+    const size = Math.min(rect.width, rect.height) || 400;
+    const outer = Math.round(size * 0.47);
+    const inner = Math.round(size * 0.31);
+    baseRadii = [outer, inner, outer, inner, outer, inner, outer];
+    // update existing nodes if any
+    const nodes = orbitContainer.querySelectorAll('.orbit-node');
+    nodes.forEach((node, i) => {
+      const angle = baseAngles[i];
+      const r = baseRadii[i] || outer;
+      node.style.transform = 'rotate(' + angle + 'deg) translateX(' + r + 'px) rotate(' + (-angle) + 'deg)';
+    });
+  }
 
   orbitContainer.addEventListener('mouseenter', () => { isHovering = true; });
   orbitContainer.addEventListener('mouseleave', () => { isHovering = false; });
 
-  // Create nodes
+  // Create nodes (compute radii first)
+  computeRadii();
   baseAngles.forEach((angle, i) => {
     const node = document.createElement('div');
     node.className = 'orbit-node';
     const delays = ['0s','0.3s','0.6s','0.9s','1.2s','1.5s','1.8s'];
-    node.style.transform = 'rotate(' + angle + 'deg) translateX(' + baseRadii[i] + 'px) rotate(' + (-angle) + 'deg)';
+    const r = baseRadii[i] || Math.round((orbitContainer.offsetWidth || 400) * 0.4);
+    node.style.transform = 'rotate(' + angle + 'deg) translateX(' + r + 'px) rotate(' + (-angle) + 'deg)';
     node.style.animationDelay = delays[i];
     node.innerHTML = '<svg width="20" height="20" viewBox="0 0 64 64" fill="none" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><line x1="20" y1="8" x2="20" y2="24"/><line x1="28" y1="8" x2="28" y2="24"/><line x1="36" y1="8" x2="36" y2="24"/><path d="M16 24 Q28 30 40 24" fill="none"/><line x1="28" y1="28" x2="28" y2="56"/><ellipse cx="50" cy="22" rx="6" ry="9"/><line x1="50" y1="31" x2="50" y2="56"/></svg>';
     orbitContainer.appendChild(node);
+  });
+
+  // Recompute radii and update node positions on window resize (debounced)
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      computeRadii();
+    }, 120);
   });
 
   function rotateOrbit() {
@@ -685,46 +796,64 @@ function closeMenu() {
 /* ===================== FITUR MARQUEE + FOCAL ZOOM ===================== */
 (function() {
   const SET = ['public/fitur-pengawasan.png', 'public/fitur-analisis.png', 'public/fitur-integritas.png'];
-  const CARD_W = 340, GAP = 24, SET_W = (CARD_W + GAP) * SET.length;
 
-  function makeCard(src, idx, totalIdx) {
-    return '<div class="fitur-card fitur-card-item" data-set-idx="' + idx + '" style="width:' + CARD_W + 'px">' +
+  function makeCard(src, idx) {
+    return '<div class="fitur-card fitur-card-item" data-set-idx="' + idx + '">' +
       '<img src="' + src + '" alt="Fitur" loading="lazy" draggable="false">' +
       '</div>';
   }
 
-  const trackA = document.getElementById('fiturTrackA');
-  const trackB = document.getElementById('fiturTrackB');
+  const trackWrapper = document.querySelector('.marquee-track-wrapper');
+  
+  // Membuat duplikasi gambar agar cukup panjang untuk animasi berjalan
   let cardsHtml = '';
-  SET.forEach((src, i) => { cardsHtml += makeCard(src, i, i); });
-  trackA.innerHTML = cardsHtml;
-  trackB.innerHTML = cardsHtml;
+  // Kita loop 4 kali (SET x 4) agar panjang elemen cukup untuk animasi 50%
+  for (let i = 0; i < 4; i++) {
+    SET.forEach((src, j) => { cardsHtml += makeCard(src, j); });
+  }
+  
+  // Masukkan semua card ke dalam 1 track panjang
+  trackWrapper.innerHTML = '<div class="marquee-track">' + cardsHtml + '</div>';
 
-  // Focal zoom with rAF
+  // Logika efek Zoom (Focal Zoom)
   let raf;
   function tick() {
     const all = document.querySelectorAll('.fitur-card-item');
     if (!all.length) { raf = requestAnimationFrame(tick); return; }
+    
+    // Cari titik tengah horizontal dari layar
     const cx = window.innerWidth / 2;
+    
+    // Cari elemen mana yang paling dekat dengan titik tengah
     let ci = 0, cd = Infinity;
     all.forEach((c, i) => {
-      const r = c.getBoundingClientRect();
-      const d = Math.abs((r.left + r.width / 2) - cx);
-      if (d < cd) { cd = d; ci = i; }
+      const rect = c.getBoundingClientRect();
+      const centerOfCard = rect.left + (rect.width / 2);
+      const d = Math.abs(centerOfCard - cx);
+      
+      if (d < cd) { 
+        cd = d; 
+        ci = i; 
+      }
     });
-    const mi = ci % SET.length;
+    
+    // Berikan efek membesar dan full warna ke elemen yang di tengah
     all.forEach((c, i) => {
-      const isCenter = (i % SET.length) === mi;
+      const isCenter = (i === ci);
       c.style.transform = 'scale(' + (isCenter ? 1.06 : 0.88) + ')';
       c.style.opacity = isCenter ? '1' : '0.5';
     });
+    
     raf = requestAnimationFrame(tick);
   }
-  raf = requestAnimationFrame(tick);
+  
+  if (window.innerWidth > 768) raf = requestAnimationFrame(tick);
 })();
 
 /* ===================== TEKNOLOGI MARQUEE + FOCAL ZOOM ===================== */
 (function() {
+  // TODO (PHP): Render data teknologi dari server (nama, deskripsi, src).
+  // Bisa di-echo langsung sebagai JSON atau dipanggil lewat endpoint API.
   const SET = [
     { name: 'TensorFlow', desc: 'Framework ML untuk model prediksi', src: 'https://img.icons8.com/color/1200/tensorflow.jpg' },
     { name: 'PyTorch', desc: 'Deep learning untuk analisis data', src: 'https://img.icons8.com/fluency/1200/pytorch.png' },
@@ -766,7 +895,8 @@ function closeMenu() {
     });
     raf = requestAnimationFrame(tick);
   }
-  raf = requestAnimationFrame(tick);
+  // Only run the focal-zoom animation on larger screens to save CPU on phones
+  if (window.innerWidth > 768) raf = requestAnimationFrame(tick);
 })();
 
 /* ===================== CARA KERJA PETA TOGGLE ===================== */
@@ -884,6 +1014,10 @@ function showFlowchartAnim() {
     observer.observe(el);
   });
 })();
+// Close mobile menu automatically when switching to desktop width
+window.addEventListener('resize', function() {
+  if (window.innerWidth > 768) closeMenu();
+});
 </script>
 
 </body>
